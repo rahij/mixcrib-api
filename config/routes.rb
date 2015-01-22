@@ -53,7 +53,9 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-  resources :users, only: [:create, :show, :update, :destroy]
+  resources :users, only: [:create, :show, :update, :destroy] do
+    get 'auth', on: :member
+  end
 
   get "/404" => "errors#not_found"
   get "/500" => "errors#exception"

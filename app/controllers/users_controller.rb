@@ -1,13 +1,17 @@
 class UsersController < ApiBaseController
-  before_action :authenticate_current_user, except: [:create]
-  skip_before_action :authenticate_request, only: [:create]
+  before_action :authenticate_current_user, except: [:create, :auth]
+  skip_before_action :authenticate_request, only: [:create, :auth]
 
   def create
-    @json = User.create(params)
+    @user = User.new(user_params)
+    @status = :bad_request unless @user.save
+    @response = @user
+    end_request
   end
 
   def show
-    @json = @requested_user
+    @response = @requested_user
+    end_request
   end
 
   def update
@@ -15,12 +19,29 @@ class UsersController < ApiBaseController
 
   def destroy
     User.destroy(params[:id])
+    end_request
+  end
+
+  def auth
+    user = User.find(params[:id]) rescue nil
+    if user && user.authenticate(params[:password])
+      user.regenerate_auth_token!
+      @response = { auth_token: user.auth_token }
+    else
+      @status = :unauthorized
+    end
+    end_request
   end
 
   private
 
+  def user_params
+    json_params = ActionController::Parameters.new(JSON.parse(request.body.read))
+    json_params.require(:user).permit(:email, :password)
+  end
+
   def authenticate_current_user
-    unless @requested_user.id == params[:id]
+    unless @requested_user.id == params[:id].to_i
       @status = :unauthorized
       end_request
     end
