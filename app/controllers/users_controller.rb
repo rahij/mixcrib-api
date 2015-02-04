@@ -1,6 +1,6 @@
 class UsersController < ApiBaseController
   before_action :authenticate_current_user, except: [:create, :auth]
-  skip_before_action :authenticate_request, only: [:create, :auth]
+  skip_filter :authenticate_request, only: [:create, :auth]
 
   def create
     @user = User.new(user_params)
@@ -23,10 +23,10 @@ class UsersController < ApiBaseController
   end
 
   def auth
-    user = User.find(params[:id]) rescue nil
+    user = User.where(email: params[:email]).last
     if user && user.authenticate(params[:password])
       user.regenerate_auth_token!
-      @response = { auth_token: user.auth_token }
+      @response = { id: user.id,  auth_token: user.auth_token }
     else
       @status = :unauthorized
     end

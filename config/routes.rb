@@ -54,7 +54,7 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
   resources :users, only: [:create, :show, :update, :destroy] do
-    get 'auth', on: :member
+    get 'auth', on: :collection
   end
 
   get "/404" => "errors#not_found"
