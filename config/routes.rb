@@ -58,6 +58,7 @@ Rails.application.routes.draw do
   end
 
   resources :playlists, only: [:create, :show, :update, :destroy]
+  match '/playlists', controller: :playlists, action: 'create', via: [:options]
 
   get "/404" => "errors#not_found"
   get "/500" => "errors#exception"
