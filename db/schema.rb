@@ -14,6 +14,7 @@
 ActiveRecord::Schema.define(version: 20150119075719) do
 
   create_table "playlists", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4,                  null: false
     t.string   "name",       limit: 255,                null: false
     t.boolean  "private",    limit: 1,   default: true, null: false
     t.datetime "created_at",                            null: false

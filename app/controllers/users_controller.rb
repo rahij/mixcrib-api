@@ -1,5 +1,4 @@
 class UsersController < ApiBaseController
-  before_action :authenticate_current_user, except: [:create, :auth]
   skip_filter :authenticate_request, only: [:create, :auth]
 
   def create
@@ -10,7 +9,12 @@ class UsersController < ApiBaseController
   end
 
   def show
-    @response = @requested_user
+    if params[:id] && @requested_user.id != params[:id].to_i
+      # render public profile
+      @response = User.find(params[:id]).public_profile
+    else
+      @response = @requested_user
+    end
     end_request
   end
 
@@ -38,12 +42,5 @@ class UsersController < ApiBaseController
   def user_params
     json_params = ActionController::Parameters.new(JSON.parse(request.body.read))
     json_params.require(:user).permit(:email, :password)
-  end
-
-  def authenticate_current_user
-    unless @requested_user.id == params[:id].to_i
-      @status = :unauthorized
-      end_request
-    end
   end
 end

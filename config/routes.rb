@@ -57,6 +57,8 @@ Rails.application.routes.draw do
     get 'auth', on: :collection
   end
 
+  resources :playlists, only: [:create, :show, :update, :destroy]
+
   get "/404" => "errors#not_found"
   get "/500" => "errors#exception"
 end
