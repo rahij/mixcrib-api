@@ -1,4 +1,10 @@
 class PlaylistsController < ApiBaseController
+  def index
+    @playlists = @requested_user.playlists
+    @response = @playlists
+    end_request
+  end
+
   def create
     @playlist = @requested_user.playlists.new(playlist_params)
     @status = :bad_request unless @playlist.save

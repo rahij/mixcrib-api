@@ -57,7 +57,7 @@ Rails.application.routes.draw do
     get 'auth', on: :collection
   end
 
-  resources :playlists, only: [:create, :show, :update, :destroy]
+  resources :playlists, only: [:index, :create, :show, :update, :destroy]
   match '/playlists', controller: :playlists, action: 'create', via: [:options]
 
   get "/404" => "errors#not_found"
