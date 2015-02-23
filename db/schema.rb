@@ -22,11 +22,12 @@ ActiveRecord::Schema.define(version: 20150119075719) do
   end
 
   create_table "tracks", force: :cascade do |t|
-    t.string   "title",      limit: 255, null: false
-    t.string   "service",    limit: 255, null: false
-    t.string   "identifier", limit: 255, null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.integer  "playlist_id", limit: 4,   null: false
+    t.string   "title",       limit: 255, null: false
+    t.string   "service",     limit: 255, null: false
+    t.string   "identifier",  limit: 255, null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   create_table "users", force: :cascade do |t|

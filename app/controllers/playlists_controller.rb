@@ -16,11 +16,11 @@ class PlaylistsController < ApiBaseController
     requested_playlist = Playlist.find(params[:id]) rescue nil
     @status = :bad_request unless requested_playlist
     if requested_playlist && requested_playlist.is_visible_to?(@requested_user)
-      @response = requested_playlist
+      render json: requested_playlist.to_json(include: :tracks)
     else
       @status = :unauthorized
+      end_request
     end
-    end_request
   end
 
   private

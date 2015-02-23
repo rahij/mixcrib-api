@@ -29,7 +29,7 @@ class UsersController < ApiBaseController
   def auth
     user = User.where(email: params[:email]).last
     if user && user.authenticate(params[:password])
-      user.regenerate_auth_token!
+      # user.regenerate_auth_token!
       @response = { id: user.id,  auth_token: user.auth_token }
     else
       @status = :unauthorized
